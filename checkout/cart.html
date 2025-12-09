@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Travel購物車頁面</title>
+  </head>
+  <!-- 1.顯示商品資訊 2.填寫聯絡資料 3.選擇支付方式 4.填寫信用卡資料（假資料即可） -->
+  <body>
+    <h2>訂單付款</h2>
+
+    <section class="order-summary">
+      <h3>商品資訊</h3>
+      <p>旅遊方案：尼泊爾 5 日遊</p>
+      <p>金額：NT$ 19,999</p>
+    </section>
+
+    <section class="form-section">
+      <h3>付款資料</h3>
+
+      <label>姓名：</label>
+      <input type="text" id="name" />
+
+      <label>Email：</label>
+      <input type="email" id="email" />
+
+      <label>付款方式：</label>
+      <select id="payment-method">
+        <option value="credit">信用卡</option>
+        <option value="atm">ATM 虛擬帳號</option>
+        <option value="linepay">Line Pay</option>
+      </select>
+
+      <div id="credit-section">
+        <label>信用卡卡號：</label>
+        <input type="text" id="card-number" />
+
+        <label>有效年月：</label>
+        <input type="text" id="card-exp" />
+
+        <label>安全碼（CVC）：</label>
+        <input type="text" id="card-cvc" />
+      </div>
+
+      <button id="pay-btn">送出付款</button>
+    </section>
+    <!-- 測試用 -->
+    <section>
+      <button onclick="sendFakeOrder()">送出假訂單</button>
+
+      <script>
+        function sendFakeOrder() {
+          fetch("http://localhost:3000/pay", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: "王小明",
+              email: "test@example.com",
+              amount: 888,
+              pay_method: "credit",
+              card_number: "4242 4242 4242 4242",
+              card_exp: "12/34",
+              card_cvc: "123",
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => console.log("假訂單已建立：", data));
+        }
+      </script>
+    </section>
+
+    <script src="cart.js"></script>
+  </body>
+</html>
