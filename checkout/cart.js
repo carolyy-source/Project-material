@@ -12,31 +12,20 @@ document.getElementById("pay-btn").addEventListener("click", () => {
     return;
   }
 
-  fetch("http://localhost:3000/pay", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
+  // 存入 localStorage
+  localStorage.setItem(
+    "payment_info",
+    JSON.stringify({
       name,
       email,
-      amount: 19999, //要從訂單導入
+      amount: 19999,
       pay_method,
       card_number,
       exp,
       cvc,
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.error) {
-        console.log("付款失敗", data);
-        location.href = "payment_fail.html";
-      } else {
-        console.log("付款成功", data);
-        localStorage.setItem("order_number", data.order_number);
-        location.href = "payment_success.html";
-      }
     })
-    .catch(() => {
-      location.href = "payment_fail.html";
-    });
+  );
+
+  // 跳轉到處理頁
+  location.href = "payment_processing.html";
 });

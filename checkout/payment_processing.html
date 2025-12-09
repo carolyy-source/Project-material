@@ -3,10 +3,57 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Travel結帳頁面</title>
+    <title>付款處理中</title>
   </head>
-  <!-- 顯示 Loading（讓使用者感覺正在付款） -->
   <body>
-    <p>正在取得銀行授權中...</p>
+    <h2>付款資料驗證中...</h2>
+    <p>請稍候...</p>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const paymentInfo = JSON.parse(localStorage.getItem("payment_info"));
+
+        if (!paymentInfo) {
+          location.href = "cart.html";
+          return;
+        }
+
+        // 從 paymentInfo 取得所有欄位
+        const { name, email, amount, pay_method, card_number, exp, cvc } =
+          paymentInfo;
+
+        fetch("http://localhost:3000/pay", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            email,
+            amount,
+            pay_method,
+            card_number,
+            exp,
+            cvc,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("伺服器回傳：", data); // 可 debug
+            setTimeout(() => {
+              console.log("準備跳轉, order_number=", data.order_number);
+              if (data && data.order_number) {
+                localStorage.setItem("order_number", data.order_number);
+                window.location.assign("payment_success.html");
+              } else {
+                window.location.assign("payment_fail.html");
+              }
+            }, 2000);
+          })
+          .catch(() => {
+            setTimeout(() => {
+              location.href = "payment_fail.html";
+            }, 2000);
+          });
+      });
+    </script>
   </body>
 </html>

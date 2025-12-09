@@ -10,17 +10,14 @@
   <body>
     <h2>付款成功 🎉</h2>
     <p>您的訂單已完成付款。</p>
-
-    <p>訂單編號：</p>
-    <p style="color: rgb(255, 0, 0)">
-      <span id="order-id">ooooxxxxx</span>
-    </p>
-
-    <button onclick="location.href='index.html'">回首頁</button>
+    <p>訂單編號：<span id="order-id"></span></p>
 
     <script>
-      document.getElementById("order-id").innerText =
-        localStorage.getItem("order_number");
+      window.addEventListener("DOMContentLoaded", () => {
+        const orderNumber = localStorage.getItem("order_number");
+        document.getElementById("order-id").innerText =
+          orderNumber || "無訂單編號";
+      });
     </script>
   </body>
 </html>
